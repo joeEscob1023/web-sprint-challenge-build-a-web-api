@@ -35,4 +35,20 @@ router.delete("/:id", checkProjectId, (req, res, next) => {
     .catch(next);
 });
 
+router.put("/:id", checkProjectId, validateProject, (req, res, next) => {
+  Project.update(req.params.id, req.body)
+    .then((projects) => {
+      res.setMaxListeners(200).json(projects);
+    })
+    .catch(next);
+});
+
+router.get("/:id/actions", checkProjectId, (req, res, next) => {
+  Project.getProjectActions(req.params.id)
+    .then((actions) => {
+      res.setMaxListeners(200).json(actions);
+    })
+    .catch(next);
+});
+
 module.exports = router;

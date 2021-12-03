@@ -25,6 +25,8 @@ const projectSchema = yup.object().shape({
     .min(3, "name must be 3 chars long")
     .max(10, "name should be 10 chars tops")
     .matches(/^[aA-zZ\s]+$/, "Only alphabets are allowed for this field"),
+  description: yup.string().required(),
+  completed: yup.bool(false),
 });
 
 async function validateProject(req, res, next) {
@@ -36,7 +38,7 @@ async function validateProject(req, res, next) {
     req.body = validated;
     next();
   } catch (err) {
-    next({ status: 404, message: err.message });
+    next({ status: 400, message: err.message });
   }
 }
 

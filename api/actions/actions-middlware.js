@@ -18,11 +18,21 @@ async function checkActionId(req, res, next) {
 }
 
 const actionSchema = yup.object().shape({
-  action: yup
+  project_id: yup.number().required(),
+
+  name: yup
     .string()
-    .typeError("Action must be a string")
+    .typeError("Name must be a string")
     .trim()
-    .required("Action is required"),
+    .required("Name is required"),
+  description: yup
+    .string()
+    .typeError("Description must be a string")
+    .trim()
+    .required("Description is required")
+    .max(128, "Description should be at least 128 chars"),
+  notes: yup.string(),
+  completed: yup.bool(false),
 });
 
 async function validateAction(req, res, next) {
@@ -33,7 +43,7 @@ async function validateAction(req, res, next) {
     });
     (req.body = validated), next();
   } catch (err) {
-    next({ status: 404, message: err.message });
+    next({ status: 400, message: err.message });
   }
 }
 
